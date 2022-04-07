@@ -157,10 +157,10 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20.0,),
                         child: TextFormField(
-                          style: TextStyle(fontSize: 18.0),
+                          style: TextStyle(fontSize: 18.0, color: Colors.white),
                           decoration: InputDecoration(
                               labelText: 'Title',
-                              labelStyle: TextStyle(fontSize: 18.0),
+                              labelStyle: TextStyle(fontSize: 18.0, color: Colors.white),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               )
@@ -176,11 +176,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         child: TextFormField(
                           readOnly: true,
                           controller: _dateController,
-                          style: TextStyle(fontSize: 18.0),
+                          style: TextStyle(fontSize: 18.0, color: Colors.white),
                           onTap: _handleDatePicker,
                           decoration: InputDecoration(
                               labelText: 'Date',
-                              labelStyle: TextStyle(fontSize: 18.0),
+                              labelStyle: TextStyle(fontSize: 18.0, color: Colors.white),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               )
@@ -193,23 +193,21 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           isDense: true,
                           icon: Icon(Icons.arrow_drop_down_circle),
                           iconSize: 22.0,
+                          dropdownColor: Colors.grey[900],
                           iconEnabledColor: Theme.of(context).primaryColor,
                           items: _priorities.map((String priority){
                             return DropdownMenuItem(
                                 value: priority,
                                 child: Text(
                                   priority,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                  ),
+                                  style: TextStyle(color: Colors.white, fontSize: 18.0),
                                 )
                             );
                           }).toList(),
                           style: TextStyle(fontSize: 18.0),
                           decoration: InputDecoration(
                             labelText:'Priopity',
-                            labelStyle: TextStyle(fontSize: 18.0),
+                            labelStyle: TextStyle(fontSize: 18.0, color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -234,10 +232,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         child: ElevatedButton(
                           child: Text(
                             btnText,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 20.0),
                           ),
                           onPressed: _submit,
                         ),

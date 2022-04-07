@@ -124,9 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         '$completedNoteCount of ${snapshot.data.length}',
                         style: TextStyle(
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                           fontSize: 40.0,
                           fontWeight: FontWeight.w600,
                         ),
