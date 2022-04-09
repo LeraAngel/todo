@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late Future<List<Note>> _noteList;
 
-  final DateFormat _dateFormatter = DateFormat('dd.MM.yyyy');
+  final DateFormat _dateFormatter = DateFormat.yMd().add_Hm();
 
   DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 

@@ -27,7 +27,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   TextEditingController _dateController = TextEditingController();
 
-  final DateFormat _dateFormatter = DateFormat('dd.MM.yyyy hh:mm');
+  final DateFormat _dateFormatter = DateFormat.yMd().add_Hm();
   final List<String> _priorities = ['Low', 'Medium', 'High'];
 
   @override
@@ -63,8 +63,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
 
   _handleDatePicker() async {
-    final DateTime? date = await showDatePicker(context: context, initialDate: _date, firstDate: DateTime(2000), lastDate: DateTime(2100));
-    //DatePicker.showDateTimePicker(context);
+    final DateTime? date = await DatePicker.showDateTimePicker(context, showTitleActions: true, minTime: DateTime.now(), currentTime: DateTime.now(),
+        locale: LocaleType.ru);
     if(date != null && date != _date) {
       setState(() {
         _date = date;
