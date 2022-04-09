@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/database/database.dart';
 import 'package:todo/models/note_model.dart';
 import 'home_screen.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AddNoteScreen extends StatefulWidget {
   final Note? note;
@@ -25,7 +27,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   TextEditingController _dateController = TextEditingController();
 
-  final DateFormat _dateFormatter = DateFormat('dd.MM.yyyy');
+  final DateFormat _dateFormatter = DateFormat('dd.MM.yyyy hh:mm');
   final List<String> _priorities = ['Low', 'Medium', 'High'];
 
   @override
@@ -60,9 +62,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   }
 
 
-
   _handleDatePicker() async {
     final DateTime? date = await showDatePicker(context: context, initialDate: _date, firstDate: DateTime(2000), lastDate: DateTime(2100));
+    //DatePicker.showDateTimePicker(context);
     if(date != null && date != _date) {
       setState(() {
         _date = date;
@@ -73,11 +75,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   _delete () {
     DatabaseHelper.instance.deleteNote(widget.note!.id!);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HomeScreen(),
-      ),
+    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_) => HomeScreen()),
     );
     widget.updateNoteList!();
   }
@@ -96,7 +94,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (_) => HomeScreen(),
           ),
         );
@@ -108,7 +106,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (_) => HomeScreen(),
           ),
         );
@@ -133,7 +131,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen(),)),
+                  onTap: () => Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_) => HomeScreen(),)),
                   child: Icon(
                     Icons.arrow_back,
                     size: 30.0,

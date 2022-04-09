@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _noteList = DatabaseHelper.instance.getNoteList();
   }
 
-
   Widget _buildNote(Note note) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -58,10 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 note.status = value! ? 1 : 0;
                 DatabaseHelper.instance.updateNote(note);
                 _updateNoteList();
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                setState(() {});
+                //Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
               },
+              side: BorderSide(width: 2.0, color: Colors.white),
               activeColor: Theme.of(context).primaryColor,
-              value: note.status == 1 ? true : false,
+              value: note.status == 1,
             ),
             onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (_) => AddNoteScreen(
                 updateNoteList: _updateNoteList(),
