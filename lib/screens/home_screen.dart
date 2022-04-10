@@ -1,14 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_10y.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:todo/database/database.dart';
 import 'package:todo/models/note_model.dart';
 import 'add_note_screen.dart';
 import 'package:sqflite/sqflite.dart';
 
+final localNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static void deleteNotification(int id) async {
+    await localNotificationsPlugin.cancel(id);
+    print("Уведомление удалено");
+  }
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -22,19 +31,49 @@ class _HomeScreenState extends State<HomeScreen> {
 
   DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
+  void iniTimeZone() async {
+    tz.initializeTimeZones();
+  }
+
   @override
   void initState () {
     super.initState();
     _updateNoteList();
+    iniTimeZone();
   }
 
   _updateNoteList () {
     _noteList = DatabaseHelper.instance.getNoteList();
   }
 
+
+  void showNotification(Note note) async {
+    var notificationDetails = const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'Channel Id',
+          'Channel Mane',
+          channelDescription: 'Description',
+          channelShowBadge: true,
+          priority: Priority.high,
+          importance: Importance.max,
+          icon: "notification_icon",
+        ));
+    if (note.date!.isAfter(DateTime.now())) {
+      await localNotificationsPlugin.zonedSchedule(
+          note.id!,
+          'Пора делать',
+          note.title,
+          tz.TZDateTime.now(tz.local).add(Duration(seconds: note.date!.difference(DateTime.now()).inSeconds)),
+          notificationDetails,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+          androidAllowWhileIdle: true);
+    }
+  }
+
+
   Widget _buildNote(Note note) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 25.0),
+        padding: EdgeInsets.symmetric(horizontal: 5.0),
       child: Column(
         children: [
           ListTile(
@@ -52,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? TextDecoration.none
                       : TextDecoration.lineThrough
             ),),
-            trailing: Checkbox(
+            leading: Checkbox(
               onChanged: (value){
                 note.status = value! ? 1 : 0;
                 DatabaseHelper.instance.updateNote(note);
@@ -64,12 +103,21 @@ class _HomeScreenState extends State<HomeScreen> {
               activeColor: Theme.of(context).primaryColor,
               value: note.status == 1,
             ),
-            onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (_) => AddNoteScreen(
+            trailing: IconButton(
+              icon: Icon(
+                Icons.doorbell,
+                color: Colors.deepOrange,
+              ),
+              onPressed: () {
+                showNotification(note);
+                print("Нажато уведомление");
+                //NotifyManager.planNotifi(id: note.id!, title: note.title!, body: note.priority!, date: note.date!);
+              },
+            ),
+            onTap: () =>
+                Navigator.push(context, CupertinoPageRoute(builder: (_) => AddNoteScreen(
                 updateNoteList: _updateNoteList(),
-                note: note,
-            ),
-            ),
-            ),
+                note: note))),
           ),
           Divider(height: 5.0, color: Theme.of(context).primaryColor, thickness: 2.0,),
         ],

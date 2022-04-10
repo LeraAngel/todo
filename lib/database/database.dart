@@ -86,4 +86,5 @@ class DatabaseHelper {
     );
     return result;
   }
+
 }

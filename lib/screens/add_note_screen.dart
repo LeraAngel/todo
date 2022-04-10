@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:todo/database/database.dart';
 import 'package:todo/models/note_model.dart';
 import 'home_screen.dart';
+import 'dart:ui';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AddNoteScreen extends StatefulWidget {
@@ -77,6 +78,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     DatabaseHelper.instance.deleteNote(widget.note!.id!);
     Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_) => HomeScreen()),
     );
+    HomeScreen.deleteNotification(widget.note!.id!);
     widget.updateNoteList!();
   }
 
@@ -91,7 +93,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       if(widget.note == null) {
         note.status = 0;
         DatabaseHelper.instance.insertNote(note);
-
         Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
@@ -103,7 +104,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         note.id = widget.note!.id;
         note.status = widget.note!.status;
         DatabaseHelper.instance.updateNote(note);
-
+        HomeScreen.deleteNotification(note.id!);
         Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
@@ -116,6 +117,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
     }
   }
+
+
+  //void addNotification () {
+  //  Note note = Note(title: _title, date: _date, priority: _priority);
+  //  localNotificationsPlugin.show(, 'Пора', _title, notificationDetails);
+ // }
+
 
 
   @override
